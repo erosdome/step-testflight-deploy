@@ -46,20 +46,20 @@ fi
 if [ -f "$TF_DSYM" ]; then
   curl http://testflightapp.com/api/builds.json \
     -F file=@$TF_IPA \
-    -F dsym=@TF_DSYM \
-    -F team_token=$TF_TEAM_TOKEN \
-    -F api_token=$TF_API_TOKEN \
-    -F notes="$TF_NOTES" \
-    -F distribution_lists="$TESTFLIGHT_DISTRIBUTION_LIST" \
+    -F dsym=@$TF_DSYM \
+    -F team_token='"$TF_TEAM_TOKEN"' \
+    -F api_token='"$TF_API_TOKEN"' \
+    -F notes='"$TF_NOTES"' \
+    -F distribution_lists='"$TESTFLIGHT_DISTRIBUTION_LIST"' \
     -F notify=$TF_NOTIFY \
     -F replace=$TF_REPLACE
 else 
   curl http://testflightapp.com/api/builds.json \
     -F file=@$TF_IPA \
-    -F team_token=$TF_TEAM_TOKEN \
-    -F api_token=$TF_API_TOKEN \
-    -F notes="$TF_NOTES" \
-    -F distribution_lists="$TESTFLIGHT_DISTRIBUTION_LIST" \
+    -F team_token='"$TF_TEAM_TOKEN"' \
+    -F api_token='"$TF_API_TOKEN"' \
+    -F notes='"$TF_NOTES"' \
+    -F distribution_lists='"$TESTFLIGHT_DISTRIBUTION_LIST"' \
     -F notify=$TF_NOTIFY \
     -F replace=$TF_REPLACE
 fi
