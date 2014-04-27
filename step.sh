@@ -1,34 +1,34 @@
 #!/bin/bash
 
 if [ -f "$CONCRETE_IPA_PATH" ]; then
-  export TF_IPA=$CONCRETE_IPA_PATH
+  export TF_IPA="$CONCRETE_IPA_PATH"
 else
   echo 'No IPA found to deploy'
   exit 1
 fi
 
 if [ ! -z "$TESTFLIGHT_TEAM_TOKEN" ]; then
-  export TF_TEAM_TOKEN=$TESTFLIGHT_TEAM_TOKEN
+  export TF_TEAM_TOKEN="$TESTFLIGHT_TEAM_TOKEN"
 else
   echo 'No team token found'
   exit 1
 fi
 
 if [ ! -z "$TESTFLIGHT_API_TOKEN" ]; then
-  export TF_API_TOKEN=$TESTFLIGHT_API_TOKEN
+  export TF_API_TOKEN="$TESTFLIGHT_API_TOKEN"
 else
   echo 'No api token found'
   exit 1
 fi
 
 if [ ! -z "$TESTFLIGHT_NOTES" ]; then
-  export TF_NOTES=$TESTFLIGHT_NOTES
+  export TF_NOTES="$TESTFLIGHT_NOTES"
 else
   export TF_NOTES="Automatic build with Concrete"
 fi
 
 if [ -f "$CONCRETE_DSYM_PATH" ]; then
-  export TF_DSYM=$CONCRETE_DSYM_PATH
+  export TF_DSYM="$CONCRETE_DSYM_PATH"
 fi
 
 if [ $TESTFLIGHT_NOTIFY ]; then
