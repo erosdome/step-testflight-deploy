@@ -46,4 +46,5 @@ curl << "-F distribution_lists=\"#{ENV['TESTFLIGHT_DISTRIBUTION_LIST']}\"" if EN
 
 puts "$ curl.join(' ')"
 `#{curl.join(' ')}`
+
 exit $?.to_i
