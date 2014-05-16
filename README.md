@@ -18,7 +18,7 @@ This step depends on the Archive Step.
 
 # Output Environment Variables
 - CONCRETE_DEPLOY_STATUS		[success/failed]
-- CONCRETE_DEPLOY_URL
+- CONCRETE_DEPLOY_URL			install url
 - .
 - TESTFLIGHT_DEPLOY_STATUS	[success/failed]
-- TESTFLIGHT_DEPLOY_URL
+- TESTFLIGHT_DEPLOY_URL			install url

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+function jsonval {
+    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | \
+    sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | sed 's/ //g' | sed "s/$prop//" | sed 's/://'`
+    #sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop
+    echo ${temp##*|}
+}
+
+
 # default values
 
 if [ ${TESTFLIGHT_NOTES+x} ]; then
@@ -69,7 +77,7 @@ if [ ! ${TESTFLIGHT_TEAM_TOKEN+x} ]; then
     exit 1
 fi
 
-res=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
+json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
 	-F "file=@$CONCRETE_IPA_PATH" \
 	-F "dsym=@$CONCRETE_DSYM_PATH" \
 	-F "api_token=$TESTFLIGHT_API_TOKEN" \
@@ -81,11 +89,18 @@ res=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
 	)
 
 echo " --- Result ---"
-echo "$res"
+echo "$json"
 echo " --------------"
+
+prop='install_url'
+install_url=`jsonval`
+echo $install_url
 
 touch ~/.bash_profile
 echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
+
+echo "export CONCRETE_DEPLOY_URL=\"success\"" >> ~/.bash_profile
+echo "export TESTFLIGHT_DEPLOY_URL=\"success\"" >> ~/.bash_profile
 
 exit 0

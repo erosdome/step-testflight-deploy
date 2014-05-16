@@ -35,3 +35,4 @@ build/
 set_env_vars.sh
 QuickBright.ipa
 QuickBright.dSYM.zip
+jsonval.sh
