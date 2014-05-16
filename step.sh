@@ -3,7 +3,6 @@
 function jsonval {
     temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | \
     sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | sed 's/ //g' | sed "s/$prop//" | sed 's/://'`
-    #sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop
     echo ${temp##*|}
 }
 
@@ -94,13 +93,15 @@ echo " --------------"
 
 prop='install_url'
 install_url=`jsonval`
-echo $install_url
 
 touch ~/.bash_profile
 echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
-echo "export CONCRETE_DEPLOY_URL=\"success\"" >> ~/.bash_profile
-echo "export TESTFLIGHT_DEPLOY_URL=\"success\"" >> ~/.bash_profile
+echo "export CONCRETE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
+echo "export TESTFLIGHT_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
+
+echo "CONCRETE_DEPLOY_URL: \"$install_url\""
+echo "TESTFLIGHT_DEPLOY_URL: \"$install_url\""
 
 exit 0
