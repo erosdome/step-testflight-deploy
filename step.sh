@@ -1,12 +1,5 @@
 #!/bin/bash
 
-function jsonval {
-    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | \
-    sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | sed 's/ //g' | sed "s/$prop//" | sed 's/://'`
-    echo ${temp##*|}
-}
-
-
 # default values
 
 if [ ${TESTFLIGHT_NOTES+x} ]; then
@@ -41,7 +34,6 @@ echo "TESTFLIGHT_DISTRIBUTION_LIST: $TESTFLIGHT_DISTRIBUTION_LIST"
 # IPA
 if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
   echo "No IPA found to deploy"
-  touch ~/.bash_profile
   echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   exit 1
@@ -51,7 +43,6 @@ fi
 if [ ${CONCRETE_DSYM_PATH+x} ]; then
 	if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
     echo "No DSYM found to deploy"
-    touch ~/.bash_profile
     echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     exit 1
@@ -61,7 +52,6 @@ fi
 # API token
 if [ ! ${TESTFLIGHT_API_TOKEN+x} ]; then
     echo "No API token found"
-    touch ~/.bash_profile
     echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     exit 1
@@ -70,7 +60,6 @@ fi
 # Team token
 if [ ! ${TESTFLIGHT_TEAM_TOKEN+x} ]; then
     echo "No Team token found"
-    touch ~/.bash_profile
     echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
     exit 1
@@ -94,7 +83,8 @@ echo " --------------"
 prop='install_url'
 install_url=`jsonval`
 
-touch ~/.bash_profile
+# TODO ERROR CHECK
+
 echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
