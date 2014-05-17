@@ -17,8 +17,9 @@ This step depends on the Archive Step.
 - TESTFLIGHT_DISTRIBUTION_LIST (optional)
 
 # Output Environment Variables
-- CONCRETE_DEPLOY_STATUS		[success/failed]
-- CONCRETE_DEPLOY_URL			install url
+- CONCRETE_DEPLOY_STATUS	[success/failed]
+- CONCRETE_DEPLOY_URL		(=install url)
 - .
 - TESTFLIGHT_DEPLOY_STATUS	[success/failed]
-- TESTFLIGHT_DEPLOY_URL			install url
+- TESTFLIGHT_DEPLOY_INSTALL_URL
+- TESTFLIGHT_DEPLOY_CONFIG_URL

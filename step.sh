@@ -1,9 +1,16 @@
 #!/bin/bash
-source ./util-jsonval/step.sh
+
+function echoStatusFailed {
+  echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+  echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+  echo "\nCONCRETE_DEPLOY_STATUS: \"failed\""
+  echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
+  echo " --------------"
+}
 
 # default values
 
-if [ ${TESTFLIGHT_NOTES+x} ]; then
+if [[ $TESTFLIGHT_NOTES ]]; then
 	notes=$TESTFLIGHT_NOTES
 else
 	notes="Automatic build with Concrete."
@@ -11,13 +18,13 @@ fi
 
 notif_lower=`echo $TESTFLIGHT_NOTIFY | tr '[:upper:]' '[:lower:]'`
 notify=""
-if [ ${TESTFLIGHT_NOTIFY+x} ] && [ "$notif_lower" = 'true' ]; then
+if [[ $TESTFLIGHT_NOTIFY ]] && [[ "$notif_lower" = "true" ]]; then
 	notify="true"
 fi
 
 replace_lower=`echo $TESTFLIGHT_REPLACE | tr '[:upper:]' '[:lower:]'`
 replace=""
-if [ ${TESTFLIGHT_REPLACE+x} ] && [ "$replace_lower" = 'true' ]; then
+if [[ $TESTFLIGHT_REPLACE ]] && [[ "$replace_lower" = "true" ]]; then
 	replace="true"
 fi
 
@@ -35,34 +42,30 @@ echo "TESTFLIGHT_DISTRIBUTION_LIST: $TESTFLIGHT_DISTRIBUTION_LIST"
 # IPA
 if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
   echo "No IPA found to deploy"
-  echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-  echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+  echoStatusFailed
   exit 1
 fi
 
 # dSYM if provided
-if [ ${CONCRETE_DSYM_PATH+x} ]; then
+if [[ $CONCRETE_DSYM_PATH ]]; then
 	if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
     echo "No DSYM found to deploy"
-    echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-    echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+    echoStatusFailed
     exit 1
 	fi
 fi
 
 # API token
-if [ ! ${TESTFLIGHT_API_TOKEN+x} ]; then
+if [[ ! $TESTFLIGHT_API_TOKEN ]]; then
     echo "No API token found"
-    echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-    echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+    echoStatusFailed
     exit 1
 fi
 
 # Team token
-if [ ! ${TESTFLIGHT_TEAM_TOKEN+x} ]; then
+if [[ ! $TESTFLIGHT_TEAM_TOKEN ]]; then
     echo "No Team token found"
-    echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-    echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
+    echoStatusFailed
     exit 1
 fi
 
@@ -79,20 +82,43 @@ json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
 
 echo " --- Result ---"
 echo "$json"
-echo " --------------"
+echo " --------------\n"
 
-prop='install_url'
-install_url=`jsonval`
+# ERROR CHECK - if not json result, then something bad happened
 
-# TODO ERROR CHECK
+if [[ ! $json =~ }.* ]]; then
+  echo " --FAILED--"
+  echo "$json"
+  echoStatusFailed
+  exit 1
+fi
+
+# everything is OK
 
 echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
-echo "export CONCRETE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
-echo "export TESTFLIGHT_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
+# install url
+install_url=$(ruby ./util-jsonval/parse_json.rb \
+  --json-string="$json" \
+  --prop=install_url)
 
+echo "export CONCRETE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
+echo "export TESTFLIGHT_DEPLOY_INSTALL_URL=\"$install_url\"" >> ~/.bash_profile
+
+# config url
+config_url=`ruby ./util-jsonval/parse_json.rb \
+  --json-string="$json" \
+  --prop=config_url`
+echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
+
+# final results
+echo "--SUCCESS--"
+echo "CONCRETE_DEPLOY_STATUS: \"success\""
+echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
 echo "CONCRETE_DEPLOY_URL: \"$install_url\""
-echo "TESTFLIGHT_DEPLOY_URL: \"$install_url\""
+echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
+echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
+echo " --------------"
 
 exit 0
