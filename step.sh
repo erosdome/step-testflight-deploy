@@ -113,7 +113,7 @@ config_url=`ruby ./util-jsonval/parse_json.rb \
 echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
 
 # final results
-echo "--SUCCESS--"
+echo "--SUCCESS--\n output env vars="
 echo "CONCRETE_DEPLOY_STATUS: \"success\""
 echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
 echo "CONCRETE_DEPLOY_URL: \"$install_url\""
