@@ -1,10 +1,8 @@
 #!/bin/bash
 
 function echoStatusFailed {
-  echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo
-  echo "CONCRETE_DEPLOY_STATUS: \"failed\""
   echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
   echo " --------------"
 }
@@ -96,7 +94,6 @@ fi
 
 # everything is OK
 
-echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
 # install url
@@ -115,7 +112,6 @@ echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
 # final results
 echo "--SUCCESS--"
 echo "output env vars="
-echo " CONCRETE_DEPLOY_STATUS: \"success\""
 echo " TESTFLIGHT_DEPLOY_STATUS: \"success\""
 echo " TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
 echo " TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""

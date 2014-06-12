@@ -1,0 +1,41 @@
+---
+name: Deploy to TestFlight
+description: |
+  Concrete step to deploy an iOS application to Testflight. First, you have to register at https://www.testflightapp.com/ . You also have to create the required tokens.
+
+inputs:
+  - title: |
+      IPA file path to upload (passed automatically by Concrete's Xcode Archive Step)
+    mapped_to: CONCRETE_IPA_PATH
+  - title: |
+      DSYM file path to upload (passed automatically by Concrete's Xcode Archive Step)
+    mapped_to: CONCRETE_DSYM_PATH
+  - title: |
+      TestFlight API Token
+    mapped_to: TESTFLIGHT_API_TOKEN
+  - title: |
+      TestFlight Team Token
+    mapped_to: TESTFLIGHT_TEAM_TOKEN
+  - title: |
+      Release Notes
+    mapped_to: TESTFLIGHT_NOTES
+  - title: |
+      Notify testers? (True/False)
+    mapped_to: TESTFLIGHT_NOTIFY
+  - title: |
+      Replace previous uploaded version? (True/False)
+    mapped_to: TESTFLIGHT_REPLACE
+  - title: |
+      Distribution list (separated with commas)
+    mapped_to: TESTFLIGHT_DISTRIBUTION_LIST
+
+outputs:
+  - title: |
+      TestFlight Deploy Status ("success" or "failed")
+    mapped_to: TESTFLIGHT_DEPLOY_STATUS
+  - title: |
+      TestFlight install URL
+    mapped_to: TESTFLIGHT_DEPLOY_INSTALL_URL
+  - title: |
+      TestFlight deploy config URL
+    mapped_to: TESTFLIGHT_DEPLOY_CONFIG_URL
