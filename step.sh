@@ -3,7 +3,8 @@
 function echoStatusFailed {
   echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-  echo "\nCONCRETE_DEPLOY_STATUS: \"failed\""
+  echo
+  echo "CONCRETE_DEPLOY_STATUS: \"failed\""
   echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
   echo " --------------"
 }
@@ -11,21 +12,21 @@ function echoStatusFailed {
 # default values
 
 if [[ $TESTFLIGHT_NOTES ]]; then
-	notes=$TESTFLIGHT_NOTES
+  notes=$TESTFLIGHT_NOTES
 else
-	notes="Automatic build with Concrete."
+  notes="Automatic build with Concrete."
 fi
 
 notif_lower=`echo $TESTFLIGHT_NOTIFY | tr '[:upper:]' '[:lower:]'`
 notify=""
 if [[ $TESTFLIGHT_NOTIFY ]] && [[ "$notif_lower" = "true" ]]; then
-	notify="true"
+  notify="true"
 fi
 
 replace_lower=`echo $TESTFLIGHT_REPLACE | tr '[:upper:]' '[:lower:]'`
 replace=""
 if [[ $TESTFLIGHT_REPLACE ]] && [[ "$replace_lower" = "true" ]]; then
-	replace="true"
+  replace="true"
 fi
 
 echo "CONCRETE_IPA_PATH: $CONCRETE_IPA_PATH"
@@ -48,37 +49,37 @@ fi
 
 # dSYM if provided
 if [[ $CONCRETE_DSYM_PATH ]]; then
-	if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
+  if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
     echo "No DSYM found to deploy"
     echoStatusFailed
     exit 1
-	fi
+  fi
 fi
 
 # API token
 if [[ ! $TESTFLIGHT_API_TOKEN ]]; then
-    echo "No API token found"
-    echoStatusFailed
-    exit 1
+  echo "No API token found"
+  echoStatusFailed
+  exit 1
 fi
 
 # Team token
 if [[ ! $TESTFLIGHT_TEAM_TOKEN ]]; then
-    echo "No Team token found"
-    echoStatusFailed
-    exit 1
+  echo "No Team token found"
+  echoStatusFailed
+  exit 1
 fi
 
 json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
-	-F "file=@$CONCRETE_IPA_PATH" \
-	-F "dsym=@$CONCRETE_DSYM_PATH" \
-	-F "api_token=$TESTFLIGHT_API_TOKEN" \
-	-F "team_token=$TESTFLIGHT_TEAM_TOKEN" \
-	-F "distribution_lists=$TESTFLIGHT_DISTRIBUTION_LIST" \
-	-F "notes=$notes" \
-	-F "notify=$notify" \
-	-F "replace=$replace" \
-	)
+  -F "file=@$CONCRETE_IPA_PATH" \
+  -F "dsym=@$CONCRETE_DSYM_PATH" \
+  -F "api_token=$TESTFLIGHT_API_TOKEN" \
+  -F "team_token=$TESTFLIGHT_TEAM_TOKEN" \
+  -F "distribution_lists=$TESTFLIGHT_DISTRIBUTION_LIST" \
+  -F "notes=$notes" \
+  -F "notify=$notify" \
+  -F "replace=$replace" \
+  )
 
 echo " --- Result ---"
 echo "$json"
@@ -103,7 +104,6 @@ install_url=$(ruby ./util-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=install_url)
 
-echo "export CONCRETE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_INSTALL_URL=\"$install_url\"" >> ~/.bash_profile
 
 # config url
@@ -113,12 +113,12 @@ config_url=`ruby ./util-jsonval/parse_json.rb \
 echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
 
 # final results
-echo "--SUCCESS--\n output env vars="
-echo "CONCRETE_DEPLOY_STATUS: \"success\""
-echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
-echo "CONCRETE_DEPLOY_URL: \"$install_url\""
-echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
-echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
+echo "--SUCCESS--"
+echo "output env vars="
+echo " CONCRETE_DEPLOY_STATUS: \"success\""
+echo " TESTFLIGHT_DEPLOY_STATUS: \"success\""
+echo " TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
+echo " TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
 
 exit 0
