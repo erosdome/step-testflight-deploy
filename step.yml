@@ -26,11 +26,11 @@ inputs:
 
 outputs:
   - title: |
-      Deployment result: 'success' or 'failed'.
+      Deployment result: 'success' or 'failed'
     mapped_to: TESTFLIGHT_DEPLOY_STATUS
   - title: |
-      Public URL of the newly deployed version.
+      Public URL of the newly deployed version
     mapped_to: TESTFLIGHT_DEPLOY_INSTALL_URL
   - title: |
-      URL of the config view.
+      URL of the config view
     mapped_to: TESTFLIGHT_DEPLOY_CONFIG_URL
