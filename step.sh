@@ -3,7 +3,7 @@
 function echoStatusFailed {
   echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-  echo "\nCONCRETE_DEPLOY_STATUS: \"failed\""
+  echo "CONCRETE_DEPLOY_STATUS: \"failed\""
   echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
   echo " --------------"
 }
@@ -41,7 +41,9 @@ echo "TESTFLIGHT_DISTRIBUTION_LIST: $TESTFLIGHT_DISTRIBUTION_LIST"
 
 # IPA
 if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
-  echo "No IPA found to deploy"
+  echo
+  echo "No IPA found to deploy. Terminating..."
+  echo
   echoStatusFailed
   exit 1
 fi
@@ -49,7 +51,9 @@ fi
 # dSYM if provided
 if [[ $CONCRETE_DSYM_PATH ]]; then
 	if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
-    echo "No DSYM found to deploy"
+    echo
+    echo "No DSYM found to deploy. Terminating..."
+    echo
     echoStatusFailed
     exit 1
 	fi
@@ -57,16 +61,20 @@ fi
 
 # API token
 if [[ ! $TESTFLIGHT_API_TOKEN ]]; then
-    echo "No API token found"
-    echoStatusFailed
-    exit 1
+  echo
+  echo "No API token provided as environment variable. Terminating..."
+  echo
+  echoStatusFailed
+  exit 1
 fi
 
 # Team token
 if [[ ! $TESTFLIGHT_TEAM_TOKEN ]]; then
-    echo "No Team token found"
-    echoStatusFailed
-    exit 1
+  echo
+  echo "No Team token provided as environment variable. Terminating..."
+  echo
+  echoStatusFailed
+  exit 1
 fi
 
 json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
