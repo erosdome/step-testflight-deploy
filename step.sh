@@ -1,9 +1,8 @@
 #!/bin/bash
 
 function echoStatusFailed {
-  echo "export CONCRETE_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
   echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
-  echo "CONCRETE_DEPLOY_STATUS: \"failed\""
+  echo
   echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
   echo " --------------"
 }
@@ -121,10 +120,10 @@ config_url=`ruby ./util-jsonval/parse_json.rb \
 echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
 
 # final results
-echo "--SUCCESS--\n output env vars="
-echo "CONCRETE_DEPLOY_STATUS: \"success\""
+echo
+echo "--SUCCESS--"
+echo "output env vars="
 echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
-echo "CONCRETE_DEPLOY_URL: \"$install_url\""
 echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
 echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
