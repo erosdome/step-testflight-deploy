@@ -12,7 +12,7 @@ function echoStatusFailed {
 if [[ $TESTFLIGHT_NOTES ]]; then
 	notes=$TESTFLIGHT_NOTES
 else
-	notes="Automatic build with Concrete."
+	notes="Automatic build with Bitrise."
 fi
 
 notif_lower=`echo $TESTFLIGHT_NOTIFY | tr '[:upper:]' '[:lower:]'`
@@ -27,8 +27,8 @@ if [[ $TESTFLIGHT_REPLACE ]] && [[ "$replace_lower" = "true" ]]; then
 	replace="true"
 fi
 
-echo "CONCRETE_IPA_PATH: $CONCRETE_IPA_PATH"
-echo "CONCRETE_DSYM_PATH: $CONCRETE_DSYM_PATH"
+echo "BITRISE_IPA_PATH: $BITRISE_IPA_PATH"
+echo "BITRISE_DSYM_PATH: $BITRISE_DSYM_PATH"
 echo "TESTFLIGHT_API_TOKEN: $TESTFLIGHT_API_TOKEN"
 echo "TESTFLIGHT_TEAM_TOKEN: $TESTFLIGHT_TEAM_TOKEN"
 echo "TESTFLIGHT_NOTIFY: $notify"
@@ -39,7 +39,7 @@ echo "TESTFLIGHT_DISTRIBUTION_LIST: $TESTFLIGHT_DISTRIBUTION_LIST"
 # test if files exist
 
 # IPA
-if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
+if [[ ! -f "$BITRISE_IPA_PATH" ]]; then
   echo
   echo "No IPA found to deploy. Terminating..."
   echo
@@ -48,8 +48,8 @@ if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
 fi
 
 # dSYM if provided
-if [[ $CONCRETE_DSYM_PATH ]]; then
-	if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
+if [[ $BITRISE_DSYM_PATH ]]; then
+	if [[ ! -f "$BITRISE_DSYM_PATH" ]]; then
     echo
     echo "No DSYM found to deploy. Terminating..."
     echo
@@ -77,8 +77,8 @@ if [[ ! $TESTFLIGHT_TEAM_TOKEN ]]; then
 fi
 
 json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
-	-F "file=@$CONCRETE_IPA_PATH" \
-	-F "dsym=@$CONCRETE_DSYM_PATH" \
+	-F "file=@$BITRISE_IPA_PATH" \
+	-F "dsym=@$BITRISE_DSYM_PATH" \
 	-F "api_token=$TESTFLIGHT_API_TOKEN" \
 	-F "team_token=$TESTFLIGHT_TEAM_TOKEN" \
 	-F "distribution_lists=$TESTFLIGHT_DISTRIBUTION_LIST" \
@@ -102,7 +102,7 @@ fi
 
 # everything is OK
 
-echo "export CONCRETE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
+echo "export BITRISE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
 # install url
@@ -110,7 +110,7 @@ install_url=$(ruby ./util-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=install_url)
 
-echo "export CONCRETE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
+echo "export BITRISE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_INSTALL_URL=\"$install_url\"" >> ~/.bash_profile
 
 # config url

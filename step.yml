@@ -1,6 +1,6 @@
 name: TestFlight Deploy
 description: |
-  Concrete step to deploy an iOS application to TestFlight. You need to register on TestFlight's website https://www.testflightapp.com. You also have to create the required tokens.
+  Bitrise step to deploy an iOS application to TestFlight. You need to register on TestFlight's website https://www.testflightapp.com. You also have to create the required tokens.
 
 
 inputs:
@@ -11,7 +11,7 @@ inputs:
       Token to access the Team where you will deploy to
     mapped_to: TESTFLIGHT_TEAM_TOKEN
   - title: |
-      (optional) Additional notes to the deploy. default = "Automatic build with Concrete."
+      (optional) Additional notes to the deploy. default = "Automatic build with Bitrise."
     mapped_to: TESTFLIGHT_NOTES
   - title: |
       (optional) Sets if a notification should be sent of the deployment. True / False (default)
