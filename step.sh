@@ -106,7 +106,7 @@ echo "export BITRISE_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
 # install url
-install_url=$(ruby ./util-jsonval/parse_json.rb \
+install_url=$(ruby ./steps-utils-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=install_url)
 
@@ -114,7 +114,7 @@ echo "export BITRISE_DEPLOY_URL=\"$install_url\"" >> ~/.bash_profile
 echo "export TESTFLIGHT_DEPLOY_INSTALL_URL=\"$install_url\"" >> ~/.bash_profile
 
 # config url
-config_url=`ruby ./util-jsonval/parse_json.rb \
+config_url=`ruby ./steps-utils-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=config_url`
 echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
