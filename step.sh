@@ -12,7 +12,7 @@ function echoStatusFailed {
 if [[ $TESTFLIGHT_NOTES ]]; then
   notes=$TESTFLIGHT_NOTES
 else
-  notes="Automatic build with Concrete."
+	notes="Automatic build with Bitrise."
 fi
 
 notif_lower=`echo $TESTFLIGHT_NOTIFY | tr '[:upper:]' '[:lower:]'`
@@ -27,8 +27,8 @@ if [[ $TESTFLIGHT_REPLACE ]] && [[ "$replace_lower" = "true" ]]; then
   replace="true"
 fi
 
-echo "CONCRETE_IPA_PATH: $CONCRETE_IPA_PATH"
-echo "CONCRETE_DSYM_PATH: $CONCRETE_DSYM_PATH"
+echo "BITRISE_IPA_PATH: $BITRISE_IPA_PATH"
+echo "BITRISE_DSYM_PATH: $BITRISE_DSYM_PATH"
 echo "TESTFLIGHT_API_TOKEN: $TESTFLIGHT_API_TOKEN"
 echo "TESTFLIGHT_TEAM_TOKEN: $TESTFLIGHT_TEAM_TOKEN"
 echo "TESTFLIGHT_NOTIFY: $notify"
@@ -39,16 +39,20 @@ echo "TESTFLIGHT_DISTRIBUTION_LIST: $TESTFLIGHT_DISTRIBUTION_LIST"
 # test if files exist
 
 # IPA
-if [[ ! -f "$CONCRETE_IPA_PATH" ]]; then
-  echo "No IPA found to deploy"
+if [[ ! -f "$BITRISE_IPA_PATH" ]]; then
+  echo
+  echo "No IPA found to deploy. Terminating..."
+  echo
   echoStatusFailed
   exit 1
 fi
 
 # dSYM if provided
-if [[ $CONCRETE_DSYM_PATH ]]; then
-  if [[ ! -f "$CONCRETE_DSYM_PATH" ]]; then
-    echo "No DSYM found to deploy"
+if [[ $BITRISE_DSYM_PATH ]]; then
+	if [[ ! -f "$BITRISE_DSYM_PATH" ]]; then
+    echo
+    echo "No DSYM found to deploy. Terminating..."
+    echo
     echoStatusFailed
     exit 1
   fi
@@ -56,28 +60,32 @@ fi
 
 # API token
 if [[ ! $TESTFLIGHT_API_TOKEN ]]; then
-  echo "No API token found"
+  echo
+  echo "No API token provided as environment variable. Terminating..."
+  echo
   echoStatusFailed
   exit 1
 fi
 
 # Team token
 if [[ ! $TESTFLIGHT_TEAM_TOKEN ]]; then
-  echo "No Team token found"
+  echo
+  echo "No Team token provided as environment variable. Terminating..."
+  echo
   echoStatusFailed
   exit 1
 fi
 
 json=$(/usr/bin/curl http://testflightapp.com/api/builds.json \
-  -F "file=@$CONCRETE_IPA_PATH" \
-  -F "dsym=@$CONCRETE_DSYM_PATH" \
-  -F "api_token=$TESTFLIGHT_API_TOKEN" \
-  -F "team_token=$TESTFLIGHT_TEAM_TOKEN" \
-  -F "distribution_lists=$TESTFLIGHT_DISTRIBUTION_LIST" \
-  -F "notes=$notes" \
-  -F "notify=$notify" \
-  -F "replace=$replace" \
-  )
+	-F "file=@$BITRISE_IPA_PATH" \
+	-F "dsym=@$BITRISE_DSYM_PATH" \
+	-F "api_token=$TESTFLIGHT_API_TOKEN" \
+	-F "team_token=$TESTFLIGHT_TEAM_TOKEN" \
+	-F "distribution_lists=$TESTFLIGHT_DISTRIBUTION_LIST" \
+	-F "notes=$notes" \
+	-F "notify=$notify" \
+	-F "replace=$replace" \
+	)
 
 echo " --- Result ---"
 echo "$json"
@@ -97,24 +105,25 @@ fi
 echo "export TESTFLIGHT_DEPLOY_STATUS=\"success\"" >> ~/.bash_profile
 
 # install url
-install_url=$(ruby ./util-jsonval/parse_json.rb \
+install_url=$(ruby ./steps-utils-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=install_url)
 
 echo "export TESTFLIGHT_DEPLOY_INSTALL_URL=\"$install_url\"" >> ~/.bash_profile
 
 # config url
-config_url=`ruby ./util-jsonval/parse_json.rb \
+config_url=`ruby ./steps-utils-jsonval/parse_json.rb \
   --json-string="$json" \
   --prop=config_url`
 echo "export TESTFLIGHT_DEPLOY_CONFIG_URL=\"$config_url\"" >> ~/.bash_profile
 
 # final results
+echo
 echo "--SUCCESS--"
 echo "output env vars="
-echo " TESTFLIGHT_DEPLOY_STATUS: \"success\""
-echo " TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
-echo " TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
+echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
+echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
+echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
 
 exit 0

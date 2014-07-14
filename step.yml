@@ -1,41 +1,36 @@
----
-name: Deploy to TestFlight
+name: TestFlight Deploy
 description: |
-  Concrete step to deploy an iOS application to Testflight. First, you have to register at https://www.testflightapp.com/ . You also have to create the required tokens.
+  Bitrise step to deploy an iOS application to TestFlight. You need to register on TestFlight's website https://www.testflightapp.com. You also have to create the required tokens.
+
 
 inputs:
   - title: |
-      IPA file path to upload (passed automatically by Concrete's Xcode Archive Step)
-    mapped_to: CONCRETE_IPA_PATH
-  - title: |
-      DSYM file path to upload (passed automatically by Concrete's Xcode Archive Step)
-    mapped_to: CONCRETE_DSYM_PATH
-  - title: |
-      TestFlight API Token
+      Token to allow uploads via the API
     mapped_to: TESTFLIGHT_API_TOKEN
   - title: |
-      TestFlight Team Token
+      Token to access the Team where you will deploy to
     mapped_to: TESTFLIGHT_TEAM_TOKEN
   - title: |
-      Release Notes
+      (optional) Additional notes to the deploy. default = "Automatic build with Bitrise."
     mapped_to: TESTFLIGHT_NOTES
   - title: |
-      Notify testers? (True/False)
+      (optional) Sets if a notification should be sent of the deployment. True / False (default)
     mapped_to: TESTFLIGHT_NOTIFY
   - title: |
-      Replace previous uploaded version? (True/False)
+      (optional) Sets if this deploy should replace the previous one. True / False (default)
     mapped_to: TESTFLIGHT_REPLACE
   - title: |
-      Distribution list (separated with commas)
+      (optional) Distribution list
     mapped_to: TESTFLIGHT_DISTRIBUTION_LIST
+
 
 outputs:
   - title: |
-      TestFlight Deploy Status ("success" or "failed")
+      Deployment result: 'success' or 'failed'
     mapped_to: TESTFLIGHT_DEPLOY_STATUS
   - title: |
-      TestFlight install URL
+      Public URL of the newly deployed version
     mapped_to: TESTFLIGHT_DEPLOY_INSTALL_URL
   - title: |
-      TestFlight deploy config URL
+      URL of the config view
     mapped_to: TESTFLIGHT_DEPLOY_CONFIG_URL
