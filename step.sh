@@ -10,7 +10,7 @@ function echoStatusFailed {
 # default values
 
 if [[ "$TESTFLIGHT_NOTES" != "" ]]; then
-	notes="$TESTFLIGHT_NOTES"
+	eval notes="$TESTFLIGHT_NOTES"
 else
 	notes="Automatic build with Bitrise."
 fi
