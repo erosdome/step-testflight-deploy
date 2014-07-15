@@ -9,8 +9,8 @@ function echoStatusFailed {
 
 # default values
 
-if [[ $TESTFLIGHT_NOTES ]]; then
-	notes=$TESTFLIGHT_NOTES
+if [[ "$TESTFLIGHT_NOTES" != "" ]]; then
+	notes="$TESTFLIGHT_NOTES"
 else
 	notes="Automatic build with Bitrise."
 fi
