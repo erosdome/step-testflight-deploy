@@ -145,7 +145,7 @@ echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
 echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
 
-echo_string_to_formatted_output "* Install URL: [${install_url}](${install_url})"
-echo_string_to_formatted_output "* Config URL: [${config_url}](${config_url})"
+echo_string_to_formatted_output "* **Install URL**: [${install_url}](${install_url})"
+echo_string_to_formatted_output "* **Config URL**: [${config_url}](${config_url})"
 
 exit 0
