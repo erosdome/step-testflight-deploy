@@ -20,7 +20,7 @@ function echoStatusFailed {
 	echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
 	echo " --------------"
 
-	write_section_to_formatted_output "**Deploy Failed**"
+	write_section_to_formatted_output "## Deploy Failed"
 	write_section_to_formatted_output "Check the Logs for details."
 }
 
@@ -145,6 +145,7 @@ echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
 echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
 
+write_section_to_formatted_output "## Deploy Success"
 echo_string_to_formatted_output "* **Install URL**: [${install_url}](${install_url})"
 echo_string_to_formatted_output "* **Config URL**: [${config_url}](${config_url})"
 
