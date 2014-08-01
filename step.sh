@@ -1,11 +1,30 @@
 #!/bin/bash
 
+formatted_output_file_path="$BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH"
+
+function echo_string_to_formatted_output {
+  echo "$1" >> $formatted_output_file_path
+}
+
+function write_section_to_formatted_output {
+  echo '' >> $formatted_output_file_path
+  echo "$1" >> $formatted_output_file_path
+  echo '' >> $formatted_output_file_path
+}
+
+
+
 function echoStatusFailed {
 	echo "export TESTFLIGHT_DEPLOY_STATUS=\"failed\"" >> ~/.bash_profile
 	echo
 	echo "TESTFLIGHT_DEPLOY_STATUS: \"failed\""
 	echo " --------------"
+
+	write_section_to_formatted_output "**Deploy Failed**"
+	write_section_to_formatted_output "Check the Logs for details."
 }
+
+write_section_to_formatted_output "# TestFlight Deploy"
 
 # default values
 
@@ -125,5 +144,8 @@ echo "TESTFLIGHT_DEPLOY_STATUS: \"success\""
 echo "TESTFLIGHT_DEPLOY_INSTALL_URL: \"$install_url\""
 echo "TESTFLIGHT_DEPLOY_CONFIG_URL: \"$config_url\""
 echo " --------------"
+
+echo_string_to_formatted_output "* Install URL: [${install_url}](${install_url})"
+echo_string_to_formatted_output "* Config URL: [${config_url}](${config_url})"
 
 exit 0
