@@ -7,6 +7,8 @@ Bitrise step to deploy an iOS application to Testflight. First, you have to regi
 
 This step depends on the Archive Step.
 
+This Step is part of the [Open StepLib](http://www.steplib.com/), you can find its StepLib page [here](http://www.steplib.com/step/testflight-deploy)
+
 # Input Environment Variables 
 - BITRISE_IPA_PATH			(passed automatically)
 - BITRISE_DSYM_PATH			(passed automatically)
